@@ -114,58 +114,45 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
+
         """
-        Create a new instance of BaseModel and save it to the JSON file.
-        Usage: create <class_name>
+    Create a new instance of BaseModel and save it to the JSON file.
+    Usage: create <class_name> <key1=value1> <key2=value2> ...
         """
         try:
-            if not args:
+            parts = arg.split(" ", 1)
+            class_name = parts[0]
+
+            if not class_name:
                 print("** class name missing **")
                 return
-    # Split the command into class name and parameters
-            command_parts = args.split(" ")
-            class_name = command_parts[0]
-            params = command_parts[1:]
-            if class_name not in HBNBCommand.classes:
+
+            if class_name not in self.valid_classes:
                 print("** class doesn't exist **")
                 return
-    # Parse the parameters into a dictionary
-            param_dict = {}
-            for param in params:
-                key_value = param.split("=")
-                if len(key_value) != 2:
-                    continue
-                key = key_value[0]
-                value = key_value[1]
 
-        # Process string values
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1].replace('\\"','"').replace("_", " ")
-        # Process float values
-                elif "." in value:
-                    try:
-                        value = float(value)
-                    except ValueError:
-                        continue
-        # Process integer values
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        continue
+            kwargs = {}
+            if len(parts) > 1:
+                pairs = parts[1].split(" ")
+                for pair in pairs:
+                    key, value = pair.split("=")
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value[1:-1].replace("_", " ")
+                    else:
+                        try:
+                            value = eval(value)
+                        except (SyntaxError, NameError):
+                            continue
+                    kwargs[key] = value
 
-                param_dict[key] = value
-                if param_dict == {}:
-                    new_instance = eval(class_name)()
-                else:
-                    new_instance = eval(class_name)(**param_dict)
-                storage.new(new_instance)
-                print(new_instance.id)
-                storage.save()
-
-        except ValueError:
-            print(ValueError)
-            return
+        # Instantiate the class with provided arguments
+            new_instance = eval(class_name)(
+                **kwargs) if kwargs else eval(class_name)()
+            storage.new(new_instance)
+            print(new_instance.id)
+            storage.save()
+        except Exception as e:
+            print(e)
 
     def help_create(self):
         """ Help information for the create method """
