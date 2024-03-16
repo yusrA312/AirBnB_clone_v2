@@ -122,15 +122,13 @@ class HBNBCommand(cmd.Cmd):
             if not args:
                 print("** class name missing **")
                 return
-            elif args[0] not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-
     # Split the command into class name and parameters
             command_parts = args.split(" ")
             class_name = command_parts[0]
             params = command_parts[1:]
-
+            if args[0] not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
     # Parse the parameters into a dictionary
             param_dict = {}
             for param in params:
