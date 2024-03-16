@@ -126,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
             command_parts = args.split(" ")
             class_name = command_parts[0]
             params = command_parts[1:]
-            if args[0] not in HBNBCommand.classes:
+            if class_name not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
     # Parse the parameters into a dictionary
