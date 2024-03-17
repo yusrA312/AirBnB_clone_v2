@@ -42,9 +42,7 @@ class DBStorage:
 
     def new(self, obj):
         """Add a new object to the database."""
-        if obj:
-            key = f"{type(obj).__name__}.{obj.id}"
-            self.__objects[key] = obj
+        self.__session.add(obj)
 
     def save(self):
         """save changes
