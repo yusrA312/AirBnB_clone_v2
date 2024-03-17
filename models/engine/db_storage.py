@@ -23,34 +23,40 @@ class DBStorage:
         passwd = getenv("HBNB_MYSQL_PWD")
         db = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
-        e = getenv("HBNB_ENV")
+        env = getenv("HBNB_ENV")
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
 
-        if e == "test":
+        if env == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Return all objects in the database"""
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
+        """
+        dic = {}
         if cls:
-            return {key: obj for key, obj in self.__objects.items()
-                    if isinstance(obj, cls)}
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
         else:
-            return self.__objects
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
-<<<<<<< HEAD
-        """Add a new object to the database."""
-=======
-<<<<<<< HEAD
-        """Add a new object to the database."""
-=======
         """add a new element in the table
         """
->>>>>>> 079bb803bd50d9843fbd0febf8d5e39e4a31d804
->>>>>>> cb171c6833607ad3999e3ead03eab5c919c38d87
         self.__session.add(obj)
 
     def save(self):
