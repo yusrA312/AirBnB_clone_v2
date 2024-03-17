@@ -27,7 +27,6 @@ class Place(BaseModel, Base):
         reviews = relationship("Review", cascade='all, delete, delete-orphan',
                                backref="place")
 
-
         @property
         def reviews(self):
             """getter for reviews relationship"""
@@ -36,4 +35,3 @@ class Place(BaseModel, Base):
             all_reviews = storage.all("Review")
             return [review for review in all_reviews
                     if review.place_id == self.id]
-
