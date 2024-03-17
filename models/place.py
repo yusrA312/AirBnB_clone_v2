@@ -3,7 +3,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Table, String, Integer, Float, ForeignKey
-from sqlalchemy.orm import relationship
 from os import getenv
 import models
 
@@ -23,15 +22,3 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        reviews = relationship("Review", cascade='all, delete, delete-orphan',
-                               backref="place")
-
-        @property
-        def reviews(self):
-            """getter for reviews relationship"""
-            from models import storage
-
-            all_reviews = storage.all("Review")
-            return [review for review in all_reviews
-                    if review.place_id == self.id]
