@@ -41,7 +41,16 @@ class DBStorage:
             return self.__objects
 
     def new(self, obj):
+<<<<<<< HEAD
         """Add a new object to the database."""
+=======
+<<<<<<< HEAD
+        """Add a new object to the database."""
+=======
+        """add a new element in the table
+        """
+>>>>>>> 079bb803bd50d9843fbd0febf8d5e39e4a31d804
+>>>>>>> cb171c6833607ad3999e3ead03eab5c919c38d87
         self.__session.add(obj)
 
     def save(self):
