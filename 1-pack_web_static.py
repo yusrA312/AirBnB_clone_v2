@@ -13,7 +13,7 @@ def do_pack():
     """
     try:
         YD= datetime.now().strftime("%Y%m%d%H%M%S")
-        if Not isdir("versions") :
+        if not isdir("versions") :
             local("mkdir versions")
         ak= "versions/web_static_{}.tgz".format(YD)
         local("tar -cvzf {} web_static".format(ak))
