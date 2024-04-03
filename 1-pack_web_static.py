@@ -12,7 +12,7 @@ def do_pack():
     """generates a tgz archive"""
     try:
         d_time = datetime.now()
-    output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
+        output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
         d_time.year,
         d_time.month,
         d_time.day,
