@@ -26,7 +26,7 @@ def do_pack():
         return None
 
 
-def deploy_new_version(archive_path):
+def do_deploy(archive_path):
     """
     Distribute archive.
     """
