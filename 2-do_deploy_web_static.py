@@ -2,51 +2,44 @@
 """
 Fabric script that distributes an archive to your web servers
 """
+from fabric.api import put, run, env
+from os.path import exists
 
-from datetime import datetime
-from fabric.api import *
-import os
-
-env.hosts = ["3.84.238.226", "54.84.245.120"]
+env.hosts = ['3.84.238.226', '54.84.245.120']
 env.user = "ubuntu"
-
-
-def do_pack():
-    """
-        return the archive path if archive has generated correctly.
-    """
-
-    local("mkdir -p versions")
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    archived_f_path = "versions/web_static_{}.tgz".format(date)
-    t_gzip_archive = local("tar -cvzf {} web_static".format(archived_f_path))
-
-    if t_gzip_archive.succeeded:
-        return archived_f_path
-    else:
-        return None
-
-
 def do_deploy(archive_path):
-    """
-        Distribute archive.
-    """
-    if os.path.exists(archive_path):
-        archived_file = archive_path[9:]
-        newest_version = "/data/web_static/releases/" + archived_file[:-4]
-        archived_file = "/tmp/" + archived_file
-        put(archive_path, "/tmp/")
-        run("sudo mkdir -p {}".format(newest_version))
-        run("sudo tar -xzf {} -C {}/".format(archived_file,
-                                             newest_version))
-        run("sudo rm {}".format(archived_file))
-        run("sudo mv {}/web_static/* {}".format(newest_version,
-                                                newest_version))
-        run("sudo rm -rf {}/web_static".format(newest_version))
-        run("sudo rm -rf /data/web_static/current")
-        run("sudo ln -s {} /data/web_static/current".format(newest_version))
-
-        print("New version deployed!")
+    """Distributes an archive to the web servers."""
+    if not exists(archive_path):
+        return False
+    
+    try:
+        file_name = archive_path[9:]
+        no_extension = file_name.split(".")[0]
+        remote_dir = "/data/web_static/releases/"
+        
+        # Upload archive to remote server
+        put(archive_path, '/tmp/')
+        
+        # Create directory for the new version
+        run('mkdir -p {}{}'.format(remote_dir, no_extension))
+        
+        # Extract archive to the new directory
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_name, remote_dir, no_extension))
+        
+        # Remove uploaded archive from /tmp/
+        run('rm /tmp/{}'.format(file_name))
+        
+        # Move contents to parent directory
+        run('mv {}{}/web_static/* {}{}/'.format(remote_dir, no_extension, remote_dir, no_extension))
+        
+        # Remove unnecessary directory
+        run('rm -rf {}{}/web_static'.format(remote_dir, no_extension))
+        
+        # Update symbolic link
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(remote_dir, no_extension))
+        
         return True
-
-    return False
+    except Exception as e:
+        print("Exception:", e)
+        return False
