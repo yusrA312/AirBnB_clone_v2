@@ -23,7 +23,6 @@ def do_clean(number=0):
     dir_server = run("ls -1t /data/web_static/releases")
     dir_server_names = dir_server.split("\n")
     for i in dir_server_names[n:]:
-        if i == 'test':
+        if i == "test":
             continue
-        run("rm -rf /data/web_static/releases/{}"
-            .format(i))
+        run("rm -rf /data/web_static/releases/{}".format(i))
