@@ -1,32 +1,48 @@
 #!/usr/bin/python3
 """
-Fabric script that distributes an archive to the web servers
+Fabric script that generates a tgz archive from the contents of the web_static
+folder of the AirBnB Clone repo
 """
 
-from fabric.api import put, run, env
-from os.path import exists
+from datetime import datetime
+from fabric.api import local, put, run
+from os.path import isdir
+import os
 
-env.hosts =  ['3.84.238.226', '54.84.245.120']
 
-
-def do_deploy(archive_path):
-    """Distributes an archive to the web servers"""
-    if exists(archive_path) is False:
-        return False
+def do_pack():
+    """
+    Generates a tgz archive in the web_static folder
+    """
     try:
-        file_name = archive_path.split("/")[-1]
-        file_name_no_ext = file_name.split(".")[0]
-        releases_path = "/data/web_static/releases/"
-        tmp_path = "/tmp/"
-        put(archive_path, tmp_path)
-        run(f'mkdir -p {releases_path}{file_name_no_ext}/')
-        run(f'tar -xzf {tmp_path}{file_name} -C {releases_path}{file_name_no_ext}/')
-        run(f'rm {tmp_path}{file_name}')
-        run(f'mv {releases_path}{file_name_no_ext}/web_static/* {releases_path}{file_name_no_ext}/')
-        run(f'rm -rf {releases_path}{file_name_no_ext}/web_static')
-        run('rm -rf /data/web_static/current')
-        run(f'ln -s {releases_path}{file_name_no_ext}/ /data/web_static/current')
+        current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
+        if not isdir("versions"):
+            local("mkdir -p versions")
+        file_name = "versions/web_static_{}.tgz".format(current_datetime)
+        local("tar -cvzf {} web_static".format(file_name))
+        return file_name
+    except Exception as e:
+        print("An error occurred:", e)
+        return None
 
-        return True
-    except:
+
+def deploy_new_version(archive_path):
+    """
+    Distribute archive.
+    """
+    if not os.path.exists(archive_path):
         return False
+    
+    archived_file = archive_path[9:]
+    newest_version = f"/data/web_static/releases/{archived_file[:-4]}"
+    archived_file = f"/tmp/{archived_file}"
+    put(archive_path, "/tmp/")
+    run(f"sudo mkdir -p {newest_version}")
+    run(f"sudo tar -xzf {archived_file} -C {newest_version}/")
+    run(f"sudo rm {archived_file}")
+    run(f"sudo mv {newest_version}/web_static/* {newest_version}")
+    run(f"sudo rm -rf {newest_version}/web_static")
+    run(f"sudo rm -rf /data/web_static/current")
+    run(f"sudo ln -s {newest_version} /data/web_static/current")
+
+    return True
