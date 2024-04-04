@@ -3,12 +3,10 @@
 Fabric script that generates a tgz  AirBnB Clone repo
 """
 
-from datetime import datetime
-from fabric.api import local
-from os.path import isdir
 from fabric.api import env, local, put, run
 from datetime import datetime
 from os.path import exists, isdir
+env.hosts = ["3.84.238.226", "54.84.245.120"]
 
 
 def do_pack():
