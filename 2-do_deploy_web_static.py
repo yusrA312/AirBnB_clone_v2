@@ -19,14 +19,13 @@ def do_deploy(archive_path):
         releases_path = "/data/web_static/releases/"
         tmp_path = "/tmp/"
         put(archive_path, tmp_path)
-       run(f'mkdir -p {releases_path}{file_name_no_ext}/')
-       run(f'tar -xzf {tmp_path}{file_name} -C {releases_path}{file_name_no_ext}/')
-       run(f'rm {tmp_path}{file_name}')
-       run(f'mv {releases_path}{file_name_no_ext}/web_static/*         {releases_path}{file_name_no_ext}/')
-      run(f'rm -rf {releases_path}{file_name_no_ext}/web_static')
-      run('rm -rf /data/web_static/current')
-      run(f'ln -s {releases_path}{file_name_no_ext}/ /data/web_static/current')
-
+        run(f'mkdir -p {releases_path}{file_name_no_ext}/')
+        run(f'tar -xzf {tmp_path}{file_name} -C {releases_path}{file_name_no_ext}/')
+        run(f'rm {tmp_path}{file_name}')
+        run(f'mv {releases_path}{file_name_no_ext}/web_static/* {releases_path}{file_name_no_ext}/')
+        run(f'rm -rf {releases_path}{file_name_no_ext}/web_static')
+        run('rm -rf /data/web_static/current')
+        run(f'ln -s {releases_path}{file_name_no_ext}/ /data/web_static/current')
 
         return True
     except:
