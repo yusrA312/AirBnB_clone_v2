@@ -30,6 +30,3 @@ def do_deploy(archive_path):
         return True
 
     return False
-
-if __name__ == "__main__":
-    do_deploy(archive_path)
