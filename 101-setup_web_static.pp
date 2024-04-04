@@ -1,48 +1,45 @@
-# setup_web_static.pp
-
-# Update package repositories and upgrade installed packages
-exec { 'apt_update':
-  command => '/usr/bin/apt-get update && /usr/bin/apt-get upgrade -y',
+# puppet
+exec { 'apt-get-update':
+  command => '/usr/bin/apt-get -y update',
   path    => '/usr/bin',
 }
 
-# Install nginx
 package { 'nginx':
   ensure => installed,
+  require => Exec['apt-get-update'],
 }
 
-# Create directories
-file { ['/data/web_static/releases/test', '/data/web_static/shared']:
+file { '/data/web_static/releases/test/':
   ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 
-# Create index.html file
+file { '/data/web_static/shared/':
+  ensure => directory,
+}
+
 file { '/data/web_static/releases/test/index.html':
   ensure  => file,
-  content => '<html><head></head><body>Holberton School</body></html>',
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
+  content => 'Puppet x Holberton School',
 }
 
-# Create symbolic link
 file { '/data/web_static/current':
   ensure => link,
   target => '/data/web_static/releases/test',
 }
 
-# Configure nginx
-file { '/etc/nginx/sites-enabled/default':
+file { '/etc/nginx/sites-available/default':
   ensure  => present,
-  content => template('yourmodule/default.erb'), # You'll need to create a template for nginx configuration
-  notify  => Service['nginx'],
+  require => File['/data/web_static/current'],
+  notify  => Exec['nginx-restart'],
+  content => template('nginx/default_site.erb'),
 }
 
-# Restart nginx
-service { 'nginx':
-  ensure     => running,
-  enable     => true,
-  hasrestart => true,
-  require    => File['/etc/nginx/sites-enabled/default'],
+exec { 'nginx-restart':
+  command => '/usr/sbin/service nginx restart',
+  path    => '/usr/bin',
+  refreshonly => true,
+}
+
+exec { 'chown-data-directory':
+  command => '/bin/chown -R ubuntu:ubuntu /data',
 }
