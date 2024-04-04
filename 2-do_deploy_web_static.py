@@ -13,7 +13,7 @@ def do_deploy(archive_path):
         return False
     
     try:
-        file_name = archive_path[9:]
+        file_name = archive_path.split("/")[-1]
         no_extension = file_name.split(".")[0]
         remote_dir = "/data/web_static/releases/"
         
