@@ -69,3 +69,7 @@ class FileStorage:
                 del self.__objects[key]
         elif obj is None:
             pass
+
+    def close(self):
+        """call reload() method"""
+        self.reload()
