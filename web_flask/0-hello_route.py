@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.route("/", strict_slashes=False)
-def Hiesraa():
+def Hiyusra():
     return "Hello HBNB!"
 
 

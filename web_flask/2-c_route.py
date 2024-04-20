@@ -7,21 +7,17 @@ app = Flask(__name__)
 
 
 @app.route("/", strict_slashes=False)
-def Hieseaa():
-    """Display Hello HBNB!"""
+def Hiyusra():
     return 'Hello HBNB!'
 
 
 @app.route("/hbnb", strict_slashes=False)
-def HB():
-    """Display HBNB"""
+def HyB():
     return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def CC(text):
-    """Return reformatted text
-    """
+def CyC(text):
     return 'C ' + text.replace('_', ' ')
 
 
