@@ -8,27 +8,23 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def Hiesraa():
-    """Return string when route queried"""
+def HiYsraaa():
     return "Hello HBNB!"
 
 
 @app.route("/hbnb")
 def HB():
-    """Return string when route queried"""
     return "HBNB"
 
 
 @app.route("/c/<text>")
-def CC(text):
-    """Return reformatted text"""
+def CCc(text):
     return "C " + text.replace("_", " ")
 
 
 @app.route("/python/")
 @app.route("/python/<text>")
-def COOL(text="is cool"):
-    """Reformat text based on optional variable"""
+def yOOL(text="is cool"):
     return "Python " + text.replace("_", " ")
 
 

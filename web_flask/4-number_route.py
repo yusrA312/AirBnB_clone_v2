@@ -7,34 +7,29 @@ app = Flask(__name__)
 
 
 @app.route("/", strict_slashes=False)
-def Hiesraa():
-    """Display Hello HBNB!"""
+def Hiyusra():
     return 'Hello HBNB!'
 
 
 @app.route("/hbnb", strict_slashes=False)
-def HB():
-    """Display HBNB"""
+def HYB():
     return 'HBNB'
 
 
 @app.route("/c/<text>", strict_slashes=False)
-def CC(text):
-    """Display C followed by the value of the text variable"""
+def CyC(text):
     t = text.replace('_', ' ')
     return 'C ' + t
 
 
 @app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
-def COOL(text='is cool'):
-    """display Python followed by the value of the text variable"""
+def YOOL(text='is cool'):
     return 'Python ' + text.replace('_', ' ')
 
 
 @app.route("/number/<int:n>", strict_slashes=False)
-def NA(n):
-    """display n is a number"""
+def YNA(n):
     return f'{n} is a number'
 
 
