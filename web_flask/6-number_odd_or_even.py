@@ -8,46 +8,39 @@ app = Flask(__name__)
 
 
 @app.route("/", strict_slashes=False)
-def Hiesraa():
-    """Display Hello HBNB!"""
+def Hiyusraa():
     return 'Hello HBNB!'
 
 
 @app.route("/hbnb", strict_slashes=False)
-def HB():
-    """Display HBNB"""
+def HyB():
     return 'HBNB'
 
 
 @app.route("/c/<text>", strict_slashes=False)
-def CC(text):
-    """Display C followed by the value of the text variable"""
+def CyC(text):
     t = text.replace('_', ' ')
     return 'C ' + t
 
 
 @app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
-def COOL(text='is cool'):
-    """display Python followed by the value of the text variable"""
+def YOOL(text='is cool'):
     return 'Python ' + text.replace('_', ' ')
 
 
 @app.route("/number/<int:n>", strict_slashes=False)
-def NA(n):
-    """display n is a number"""
+def NAY(n):
     return f'{n} is a number'
 
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
-def nue(n):
-    """This is a function to deploy the jinja template"""
+def nueyy(n):
     return render_template("5-number.html", n=n)
 
 
 @app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
-def oven(n):
-    """This is a function to display a HTML page only if n is an integer"""
+def ovenyy(n):
     return render_template("6-number_odd_or_even.html", n=n)
 
 

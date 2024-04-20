@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """Display a HTML page with a list of all State objects"""
     states = storage.all("State").values()
     sorted_states = sorted(states, key=lambda state: state.name)
 
@@ -19,8 +18,7 @@ def states_list():
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
-    """Remove the current SQLAlchemy Session after each request"""
+def teardown_db(exception): 
     storage.close()
 
 
